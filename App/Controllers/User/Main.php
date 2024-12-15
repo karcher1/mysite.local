@@ -12,6 +12,6 @@ class Main extends Controller
             'test' => 'Main',
             'test1' => 'About',
         ];
-        $this->publicView();
+        $this->publicView("main/index", 'User');
     }
 }

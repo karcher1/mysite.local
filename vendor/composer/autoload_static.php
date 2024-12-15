@@ -25,6 +25,9 @@ class ComposerStaticInit015d62a72796b1d39847d48edb6ebd3c
         'App\\Controllers\\Admin\\Error' => __DIR__ . '/../..' . '/App/Controllers/Admin/Error.php',
         'App\\Controllers\\Admin\\Gallery' => __DIR__ . '/../..' . '/App/Controllers/Admin/Gallery.php',
         'App\\Controllers\\Admin\\Main' => __DIR__ . '/../..' . '/App/Controllers/Admin/Main.php',
+        'App\\Controllers\\Admin\\Post' => __DIR__ . '/../..' . '/App/Controllers/Admin/Post.php',
+        'App\\Controllers\\Admin\\PostCategory' => __DIR__ . '/../..' . '/App/Controllers/Admin/PostCategory.php',
+        'App\\Controllers\\Admin\\User' => __DIR__ . '/../..' . '/App/Controllers/Admin/User.php',
         'App\\Controllers\\Controller' => __DIR__ . '/../..' . '/App/Controllers/Controller.php',
         'App\\Controllers\\User\\About' => __DIR__ . '/../..' . '/App/Controllers/User/About.php',
         'App\\Controllers\\User\\Error' => __DIR__ . '/../..' . '/App/Controllers/User/Error.php',
@@ -32,6 +35,10 @@ class ComposerStaticInit015d62a72796b1d39847d48edb6ebd3c
         'App\\Controllers\\User\\Main' => __DIR__ . '/../..' . '/App/Controllers/User/Main.php',
         'App\\Core\\Router' => __DIR__ . '/../..' . '/App/Core/Router.php',
         'App\\Core\\Viewer' => __DIR__ . '/../..' . '/App/Core/Viewer.php',
+        'App\\Models\\Gallery' => __DIR__ . '/../..' . '/App/Models/Gallery.php',
+        'App\\Models\\Post' => __DIR__ . '/../..' . '/App/Models/Post.php',
+        'App\\Models\\PostCategory' => __DIR__ . '/../..' . '/App/Models/PostCategory.php',
+        'App\\Models\\User' => __DIR__ . '/../..' . '/App/Models/User.php',
         'Composer\\InstalledVersions' => __DIR__ . '/..' . '/composer/InstalledVersions.php',
     );
 

@@ -54,8 +54,8 @@ class Router
 
     private function processRequest(): void
     {
-        $this->requestUri = isset($_SERVER["REQUEST_URI"])
-            ? explode("/", trim($_SERVER["REQUEST_URI"], "/"))
+        $this->requestUri = isset($_SERVER["REDIRECT_URL"])
+            ? explode("/", trim($_SERVER["REDIRECT_URL"], "/"))
             : [];
     }
 
