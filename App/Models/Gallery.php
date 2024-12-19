@@ -2,54 +2,36 @@
 
 namespace App\Models;
 
-use App\Orm\Connector;
-use App\Orm\Insert;
+use App\orm\Connector;
+use App\orm\Insert;
+use PDO;
 
 class Gallery
 {
-    private $db;
+    private PDO $db;
 
     public function __construct()
     {
-        $this->db = Connector::getConnection();
+        $this->db = Connector::getInstance()->getConnection();
     }
 
     public function getAllGallery(): array
     {
-        $query = $this->db->query(
-            "SELECT g.id, g.name, g.image, g.category_id AS categoryId, gc.name AS categoryName 
-         FROM gallery g 
-         LEFT JOIN gallery_category gc 
-         ON g.category_id = gc.id"
-        );
-        return $query->fetchAll(\PDO::FETCH_ASSOC);
+        $query = $this->db->query('SELECT * FROM gallery');
+        return $query->fetchAll(PDO::FETCH_ASSOC);
     }
 
-
-    public function getOneGallery(int $id): array
-    {
-        $stmt = $this->db->prepare("SELECT g.*, gc.name as categoryName FROM gallery g LEFT JOIN gallery_category gc ON g.category_id = gc.id WHERE g.id = :id");
-        $stmt->bindParam(':id', $id, \PDO::PARAM_INT);
-        $stmt->execute();
-
-        $result = $stmt->fetch(\PDO::FETCH_ASSOC);
-
-        if (!$result) {
-            throw new \Exception('Gallery item not found');
-        }
-
-        return $result;
-    }
-
-    public function insertGallery(array $data): bool
+    public function insertGallery(array $data): void
     {
         $insert = new Insert();
-        $query = $insert
-            ->setTable('gallery')
-            ->setFields(['name', 'image', 'category_id'])
-            ->setValues([$data])
-            ->getQuery();
-
-        return $this->db->exec($query) > 0;
+        $insert
+            ->into('gallery')
+            ->fields(['name', 'image', 'category_id'])
+            ->values([[
+                'name' => $data['name'],
+                'image' => $data['image'],
+                'category_id' => $data['category_id'],
+            ]])
+            ->execute();
     }
 }

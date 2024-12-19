@@ -17,29 +17,28 @@ class Gallery extends Controller
     {
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $data = [
-                $_POST['name'],
-                $_POST['image'],
-                (int)$_POST['category_id'],
+                'name' => $_POST['name'] ?? null,
+                'image' => $_POST['image'] ?? null,
+                'category_id' => $_POST['category_id'] ?? null,
             ];
 
-            $model = new GalleryModel();
-
-            try {
-                $model->insertGallery($data);
-                header("Location: /gallery");
-                exit();
-            } catch (\Exception $e) {
-                echo "Error: " . $e->getMessage();
+            // Проверка на наличие всех данных
+            if (empty($data['name']) || empty($data['image']) || empty($data['category_id'])) {
+                die('All fields are required');
             }
-        } else {
-            $this->publicView('gallery/create', 'User');
+
+            $model = new GalleryModel;
+            $model->insertGallery($data);
+
+            header('Location: /gallery');
+            exit();
         }
+
+        $this->publicView('gallery/create', 'User');
     }
 
     public function update(): void
     {
-        $model = new GalleryModel();
-        $this->data = ['data' =>$model->getOneGallery($_GET['id'])];
         $this->publicView('gallery/update', 'User');
     }
 

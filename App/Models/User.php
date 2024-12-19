@@ -2,35 +2,33 @@
 
 namespace App\Models;
 
-use Exception;
+use App\orm\Insert;
+use App\orm\Connector;
 
 class User
 {
-    private array $users = [
-        1 => [
-            'id' => 1,
-            'name' => 'John Doe',
-            'email' => 'john@example.com',
-            'role' => 'Admin',
-        ],
-        2 => [
-            'id' => 2,
-            'name' => 'Jane Smith',
-            'email' => 'jane@example.com',
-            'role' => 'User',
-        ],
-    ];
-
     public function getAllUsers(): array
     {
-        return $this->users;
+        $db = Connector::getInstance()->getConnection();
+        $stmt = $db->query("SELECT * FROM user");
+        return $stmt->fetchAll(\PDO::FETCH_ASSOC);
     }
 
     public function getUserById(int $id): array
     {
-        if (isset($this->users[$id])) {
-            return $this->users[$id];
-        }
-        throw new Exception('User not found');
+        $db = Connector::getInstance()->getConnection();
+        $stmt = $db->prepare("SELECT * FROM user WHERE id = :id");
+        $stmt->execute(['id' => $id]);
+        return $stmt->fetch(\PDO::FETCH_ASSOC);
+    }
+
+    public function insertUser(array $data): void
+    {
+        $insert = new Insert();
+        $insert
+            ->into('user')
+            ->fields(['username', 'email', 'password'])
+            ->values([$data])
+            ->execute();
     }
 }

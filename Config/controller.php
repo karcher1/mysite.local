@@ -24,33 +24,39 @@ return [
     'admin/gallery/view' => 'Admin/Gallery/view',
     'admin/error' => 'Admin/Error/view',
 
-    // Admin User
-    'admin/user' => 'Admin/User/view',
-    'admin/user/view' => 'Admin/User/view',
-    'admin/user/create' => 'Admin/User/create',
-    'admin/user/update' => 'Admin/User/update',
-    'admin/user/delete' => 'Admin/User/delete',
+    // User
+    'user' => 'User/User/view',
+    'user/view' => 'User/User/view',
+    'user/create' => 'User/User/create',
+    'user/update' => 'User/User/update',
+    'user/delete' => 'User/User/delete',
 
-    // Admin Post
+    // Post
     'admin/post' => 'Admin/Post/view',
     'admin/post/view' => 'Admin/Post/view',
     'admin/post/create' => 'Admin/Post/create',
     'admin/post/update' => 'Admin/Post/update',
     'admin/post/delete' => 'Admin/Post/delete',
 
-    // Admin PostCategory
-    'admin/postcategory' => 'Admin/PostCategory/view',
-    'admin/postcategory/view' => 'Admin/PostCategory/view',
-    'admin/postcategory/create' => 'Admin/PostCategory/create',
-    'admin/postcategory/update' => 'Admin/PostCategory/update',
-    'admin/postcategory/delete' => 'Admin/PostCategory/delete',
+    'post' => 'User/Post/view',
+    'post/view' => 'User/Post/view',
+    'post/create' => 'User/Post/create',
 
-    // Admin GalleryCategory
-    'admin/gallerycategory' => 'Admin/GalleryCategory/view',
-    'admin/gallerycategory/view' => 'Admin/GalleryCategory/view',
-    'admin/gallerycategory/create' => 'Admin/GalleryCategory/create',
-    'admin/gallerycategory/update' => 'Admin/GalleryCategory/update',
-    'admin/gallerycategory/delete' => 'Admin/GalleryCategory/delete',
+
+    // PostCategory
+    'post-category' => 'User/Postcategory/view',
+    'post-category/view' => 'User/Postcategory/view',
+    'post-category/create' => 'User/Postcategory/create',
+    'post-category/update' => 'User/Postcategory/update',
+    'post-category/delete' => 'User/Postcategory/delete',
+
+
+    // GalleryCategory
+    'gallerycategory' => 'User/GalleryCategory/view',
+    'gallerycategory/view' => 'User/GalleryCategory/view',
+    'gallerycategory/create' => 'User/GalleryCategory/create',
+    'gallerycategory/update' => 'User/GalleryCategory/update',
+    'gallerycategory/delete' => 'User/GalleryCategory/delete',
 
 
 

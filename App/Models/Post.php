@@ -2,35 +2,31 @@
 
 namespace App\Models;
 
-use Exception;
+use App\orm\Connector;
+use PDO;
 
 class Post
 {
-    private array $posts = [
-        1 => [
-            'id' => 1,
-            'title' => 'First Post',
-            'content' => 'This is the content of the first post.',
-            'author' => 'John Doe',
-        ],
-        2 => [
-            'id' => 2,
-            'title' => 'Second Post',
-            'content' => 'This is the content of the second post.',
-            'author' => 'Jane Smith',
-        ],
-    ];
+    private PDO $db;
+
+    public function __construct()
+    {
+        $this->db = Connector::getInstance()->getConnection();
+    }
 
     public function getAllPosts(): array
     {
-        return $this->posts;
+        $query = $this->db->query('SELECT * FROM post');
+        return $query->fetchAll(PDO::FETCH_ASSOC);
     }
 
-    public function getPostById(int $id): array
+    public function insertPost(string $title, string $content, int $userId): bool
     {
-        if (isset($this->posts[$id])) {
-            return $this->posts[$id];
-        }
-        throw new Exception('Post not found');
+        $query = $this->db->prepare('INSERT INTO post (title, content, user_id) VALUES (:title, :content, :user_id)');
+        return $query->execute([
+            'title' => $title,
+            'content' => $content,
+            'user_id' => $userId,
+        ]);
     }
 }
