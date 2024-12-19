@@ -38,10 +38,10 @@
                 <?= $gallery_item['image'] ?>
             </td>
             <td>
-                <?= $gallery_item['categoryName'] ?>
+                <?= $gallery_item['categoryName'] ?? 'N/A' ?>
             </td>
             <td>
-                <?= $gallery_item['categoryId'] ?>
+                <?= $gallery_item['categoryId'] ?? 'N/A' ?>
             </td>
             <td>
                 <a href="/gallery/update?id=<?= $gallery_item['id'] ?>">

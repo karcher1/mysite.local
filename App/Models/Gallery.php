@@ -2,51 +2,54 @@
 
 namespace App\Models;
 
-use Exception;
+use App\Orm\Connector;
+use App\Orm\Insert;
 
 class Gallery
 {
-    private array $gallery = [
-        1 => [
-            'id' => 1,
-            'name' => 'name1',
-            'image' => 'image1',
-            'categoryName' => 'categoryName1',
-            'categoryId' => 1,
-        ],
-        [
-            'id' => 2,
-            'name' => 'name2',
-            'image' => 'image2',
-            'categoryName' => 'categoryName2',
-            'categoryId' => 2,
-        ],
-        [
-            'id' => 3,
-            'name' => 'name3',
-            'image' => 'image3',
-            'categoryName' => 'categoryName3',
-            'categoryId' => 3,
-        ],
-        [
-            'id' => 4,
-            'name' => 'name4',
-            'image' => 'image4',
-            'categoryName' => 'categoryName4',
-            'categoryId' => 4,
-        ],
-    ];
+    private $db;
+
+    public function __construct()
+    {
+        $this->db = Connector::getConnection();
+    }
+
     public function getAllGallery(): array
     {
-        return $this->gallery;
+        $query = $this->db->query(
+            "SELECT g.id, g.name, g.image, g.category_id AS categoryId, gc.name AS categoryName 
+         FROM gallery g 
+         LEFT JOIN gallery_category gc 
+         ON g.category_id = gc.id"
+        );
+        return $query->fetchAll(\PDO::FETCH_ASSOC);
     }
+
 
     public function getOneGallery(int $id): array
     {
-        if (isset($this->gallery[$id])) {
-            return $this->gallery[$id];
+        $stmt = $this->db->prepare("SELECT g.*, gc.name as categoryName FROM gallery g LEFT JOIN gallery_category gc ON g.category_id = gc.id WHERE g.id = :id");
+        $stmt->bindParam(':id', $id, \PDO::PARAM_INT);
+        $stmt->execute();
+
+        $result = $stmt->fetch(\PDO::FETCH_ASSOC);
+
+        if (!$result) {
+            throw new \Exception('Gallery item not found');
         }
-        throw new Exception('ID is absent');
+
+        return $result;
     }
 
+    public function insertGallery(array $data): bool
+    {
+        $insert = new Insert();
+        $query = $insert
+            ->setTable('gallery')
+            ->setFields(['name', 'image', 'category_id'])
+            ->setValues([$data])
+            ->getQuery();
+
+        return $this->db->exec($query) > 0;
+    }
 }

@@ -14,7 +14,9 @@
         }
     ],
     "minimum-stability": "dev",
-    "require": {},
+    "require": {
+      "ext-pdo": "*"
+    },
     "config": {
         "optimize-autoloader": true,
         "preferred-install": "dist",

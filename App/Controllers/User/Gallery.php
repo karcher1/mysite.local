@@ -15,7 +15,25 @@ class Gallery extends Controller
     }
     public function create(): void
     {
-        echo 'create method for user';
+        if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+            $data = [
+                $_POST['name'],
+                $_POST['image'],
+                (int)$_POST['category_id'],
+            ];
+
+            $model = new GalleryModel();
+
+            try {
+                $model->insertGallery($data);
+                header("Location: /gallery");
+                exit();
+            } catch (\Exception $e) {
+                echo "Error: " . $e->getMessage();
+            }
+        } else {
+            $this->publicView('gallery/create', 'User');
+        }
     }
 
     public function update(): void
