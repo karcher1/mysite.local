@@ -2,33 +2,27 @@
 
 namespace App\Models;
 
-use Exception;
+use App\orm\Connector;
+use PDO;
 
 class GalleryCategory
 {
-    private array $categories = [
-        1 => [
-            'id' => 1,
-            'name' => 'Nature',
-            'description' => 'Category for nature-related images.',
-        ],
-        2 => [
-            'id' => 2,
-            'name' => 'Architecture',
-            'description' => 'Category for architectural images.',
-        ],
-    ];
+    private PDO $db;
+
+    public function __construct()
+    {
+        $this->db = Connector::getInstance()->getConnection();
+    }
 
     public function getAllCategories(): array
     {
-        return $this->categories;
+        $query = $this->db->query('SELECT * FROM gallery_category');
+        return $query->fetchAll(PDO::FETCH_ASSOC);
     }
 
-    public function getCategoryById(int $id): array
+    public function insertCategory(string $name): bool
     {
-        if (isset($this->categories[$id])) {
-            return $this->categories[$id];
-        }
-        throw new Exception('Category not found');
+        $query = $this->db->prepare('INSERT INTO gallery_category (name) VALUES (:name)');
+        return $query->execute(['name' => $name]);
     }
 }

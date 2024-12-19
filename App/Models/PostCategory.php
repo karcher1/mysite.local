@@ -2,33 +2,27 @@
 
 namespace App\Models;
 
-use Exception;
+use App\orm\Connector;
+use PDO;
 
 class PostCategory
 {
-    private array $categories = [
-        1 => [
-            'id' => 1,
-            'name' => 'News',
-            'description' => 'Category for news-related posts.',
-        ],
-        2 => [
-            'id' => 2,
-            'name' => 'Tutorials',
-            'description' => 'Category for tutorials and guides.',
-        ],
-    ];
+    private PDO $db;
+
+    public function __construct()
+    {
+        $this->db = Connector::getInstance()->getConnection();
+    }
 
     public function getAllCategories(): array
     {
-        return $this->categories;
+        $query = $this->db->query('SELECT * FROM post_category');
+        return $query->fetchAll(PDO::FETCH_ASSOC);
     }
 
-    public function getCategoryById(int $id): array
+    public function insertCategory(string $name): bool
     {
-        if (isset($this->categories[$id])) {
-            return $this->categories[$id];
-        }
-        throw new Exception('Category not found');
+        $query = $this->db->prepare('INSERT INTO post_category (name) VALUES (:name)');
+        return $query->execute(['name' => $name]);
     }
 }

@@ -8,63 +8,40 @@ class Insert
     private array $fields = [];
     private array $values = [];
 
-    public function setTable(string $table): self
+    public function into(string $table): self
     {
         $this->table = $table;
         return $this;
     }
 
-    public function setFields(array $fields): self
+    public function fields(array $fields): self
     {
         $this->fields = $fields;
         return $this;
     }
 
-    public function setValues(array $values): self
+    public function values(array $values): self
     {
-        if ($this->isValidValues($values)) {
-            $this->values = $values;
-        } else {
-            throw new \Exception('Keys in values arrays do not match fields');
-        }
+        $this->values = $values;
         return $this;
     }
 
     public function getQuery(): string
     {
-        if (empty($this->table) || empty($this->fields) || empty($this->values)) {
-            throw new \Exception('Table, fields, and values must be set before generating the query');
-        }
+        $fieldsString = implode(", ", $this->fields);
+        $placeholders = array_map(fn($v) => '(' . implode(', ', array_fill(0, count($v), '?')) . ')', $this->values);
+        $placeholdersString = implode(', ', $placeholders);
 
-        $fieldsString = implode(', ', $this->fields);
-        $valuesString = $this->prepareValues();
-
-        return "INSERT INTO {$this->table} ({$fieldsString}) VALUES {$valuesString};";
+        return "INSERT INTO {$this->table} ({$fieldsString}) VALUES {$placeholdersString}";
     }
 
-    private function prepareValues(): string
+    public function execute(): void
     {
-        $preparedValues = array_map(function ($valueSet) {
-            $quotedValues = array_map(fn($value) => "'$value'", $valueSet);
-            return '(' . implode(', ', $quotedValues) . ')';
-        }, $this->values);
+        $connection = Connector::getInstance()->getConnection();
+        $stmt = $connection->prepare($this->getQuery());
 
-        return implode(', ', $preparedValues);
-    }
+        $params = array_merge(...$this->values);
 
-    private function isValidValues(array $values): bool
-    {
-        if (!is_array($values) || empty($values)) {
-            return false;
-        }
-
-        $fieldCount = count($this->fields);
-        foreach ($values as $valueSet) {
-            if (!is_array($valueSet) || count($valueSet) !== $fieldCount) {
-                return false;
-            }
-        }
-
-        return true;
+        $stmt->execute($params);
     }
 }
